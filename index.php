@@ -75,4 +75,4 @@ function writeCSV($msg){
 	fclose($filehandle);
 
 }
-?>
+
