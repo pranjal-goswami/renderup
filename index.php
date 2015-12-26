@@ -54,7 +54,7 @@ if(file_exists($cachedFilePath)){
 
 	//Generate Command to render using PhantomJS
 	$cmd = PHANTOMJS_BIN_LOCATION.' '.RENDER_UP_JS_PATH.' '.$url.' > '.$cachedFilePath;
-	echo $cmd;
+	
 	$r = exec($cmd,$resp,$ret);
 
 	$file = fopen($cachedFilePath, "r") or die("Unable to open file!");
