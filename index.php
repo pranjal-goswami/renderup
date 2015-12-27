@@ -19,6 +19,14 @@ $logger = Logger::getInstance(RENDER_UP_LOG_FILE);
 
 $url = urldecode($_GET["url"]);
 
+
+//Should force reload of page to cache
+if(isset($_GET["force"]) && $_GET["force"]==true){
+	$forceReload = true;
+} else {
+	$forceReload = false;
+}
+
 $url = strtok($url,"?");
 
 //Check if URL is present
@@ -35,7 +43,7 @@ $cachedFilePath = CACHE_FILE_LOCATION.$cacheFileName.".html";
 
 
 //Check if the file exists in cache : 
-if(file_exists($cachedFilePath)){
+if(file_exists($cachedFilePath) && $forceReload == false){
 	
 	//echo $cachedFilePath;
 
