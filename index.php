@@ -36,10 +36,8 @@ if(is_null($url) || $url == "" ){
 
 }
 
-//Generate md5 hash for storing file in cache
-$cacheFileName = md5($url);
 
-$cachedFilePath = CACHE_FILE_LOCATION.$cacheFileName.".html";
+$cachedFilePath = getCacheFileLocation($url);
 
 
 //Check if the file exists in cache : 
@@ -56,7 +54,7 @@ if(file_exists($cachedFilePath) && $forceReload == false){
 	
 	//Log time taken
 	$logger->logInfo("Read from cache ".$url." in [".($time)."ms]");
-	writeCSV("READ,".$time.",".$url.",".$cacheFileName);
+	writeCSV("READ,".$time.",".$url.",".$cachedFilePath);
 
 } else {
 
@@ -74,10 +72,24 @@ if(file_exists($cachedFilePath) && $forceReload == false){
 	$time = round((microtime(true) - $_SERVER["REQUEST_TIME_FLOAT"])*1000);
 
 	$logger->logInfo("Cached ".$url." in [".($time)."ms]");
-	writeCSV("CACHE,".$time.",".$url.",".$cacheFileName);
+	writeCSV("CACHE,".$time.",".$url.",".$cachedFilePath);
 
 
 }
+
+function getCacheFileLocation($url){
+	$urlHash = md5($url);
+	$f1 = substr($urlHash,0,2);
+	$f2 = substr($urlHash,2,2);
+	$file = substr($urlHash,4);
+	$dir  = CACHE_FILE_LOCATION.$f1."/".$f2;
+	if (!file_exists($dir)) {
+	    mkdir($dir, 0777, true);
+	}
+	return $dir."/".$file.".html"
+}
+	
+	
 
 function writeCSV($msg){
 	$filehandle = fopen("/tmp/loaddata.csv", "a") or die("can't open file /tmp/loaddata.csv");
