@@ -19,7 +19,7 @@ $logger = Logger::getInstance(RENDER_UP_LOG_FILE);
 
 $url = urldecode($_GET["url"]);
 
-$url = str_replace("_escaped_fragment_", "", $url);
+$url = strtok($url,"?");
 
 //Check if URL is present
 if(is_null($url) || $url == "" ){
